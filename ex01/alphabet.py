@@ -39,13 +39,11 @@ def kaitou_num(kesson):
 
 # 欠損文字を受け付け評価する関数(引数：欠損文字のリスト　戻り値：bool)
 def katou_char(kesson):
-    user_input2 = input("1つ目の文字を入力してください:")
-    user_input3 = input("2つ目の文字を入力してください:")
-    if (
-        user_input2.upper() in kesson and
-        user_input3.upper() in kesson and
-        user_input2.upper() != user_input3.upper()
-    ):
+    user_answers = []
+    for i in range(ERRCHARNUM):
+        if not (user_input := input(f"{i+1}つ目の文字を入力してください:")) in user_answers:
+            user_answers.append(user_input)
+    if (set(user_answers) == set(kesson)):
         print("正解です！")
         return True
     else:
