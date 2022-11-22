@@ -14,7 +14,7 @@ def shutsudai():
     print("対象文字：")
     print(*quiz)
 
-    kesson = sample(quiz, ERRCHARNUM)
+    defect = sample(quiz, ERRCHARNUM)
     print("欠損文字：")
     print(*kesson)
 
