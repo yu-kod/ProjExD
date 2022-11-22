@@ -41,7 +41,11 @@ def kaitou_num(kesson):
 def katou_char(kesson):
     user_input2 = input("1つ目の文字を入力してください:")
     user_input3 = input("2つ目の文字を入力してください:")
-    if user_input2.upper() in kesson and user_input3.upper() in kesson:
+    if (
+        user_input2.upper() in kesson and
+        user_input3.upper() in kesson and
+        user_input2.upper() != user_input3.upper()
+    ):
         print("正解です！")
         return True
     else:
