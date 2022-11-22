@@ -8,14 +8,14 @@ quiz_data = [
 ]
 
 
-# ランダムに問題を出題する関数
+# ランダムに問題を出題する関数(引数：無し　戻り値：選択されたクイズの番号)
 def shutudai():
     quiz_no = random.randint(0, len(quiz_data))
     print(quiz_data[quiz_no]["question"])
     return quiz_no
 
 
-# 解答を受け付け評価する関数
+# 解答を受け付け評価する関数(引数：選択されたクイズの番号　戻り値：無し)
 def kaitou(quiz_no):
     user_input = input("解答:")
     if user_input in quiz_data[quiz_no]["answer"]:
