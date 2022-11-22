@@ -1,6 +1,6 @@
 from string import ascii_uppercase
 from random import sample
-from datetime import datetime
+from time import time
 
 
 TEXTNUM = 10    # 生成するアルファベットの個数
@@ -32,8 +32,6 @@ def kaitou_num(kesson):
         print("正解です。それでは具体的に欠損文字を1つずつ入力してください")
         return True
     else:
-        print("不正解です。またチャレンジしてください")
-        print("--------------------------------------------------------")
         return False
 
 
@@ -47,20 +45,21 @@ def katou_char(kesson):
         print("正解です！")
         return True
     else:
-        print("不正解です。またチャレンジしてください")
-        print("--------------------------------------------------------")
         return False
 
 
 if __name__ == '__main__':
-    st = datetime.now()
-    for i in range(5):
+    st = time()
+    for i in range(MAXREPEAT):
         kesson = shutsudai()
         if kaitou_num(kesson) and katou_char(kesson):
-            ed = datetime.now()
-            print(f"正解までの時間は{(ed - st).seconds}秒です。")
             break
+        else:
+            print("不正解です。またチャレンジしてください")
+            print("-"*20)
     else:
         print("解答権がなくなりました")
+    ed = time()
+    print(f"所要時間は{(ed - st):.2f}秒です。")
 
-# (57行目)短絡評価によって、前方がTrueにならないと後方が実行されないため正しく動作する。
+# (55行目)短絡評価によって、前方がTrueにならないと後方が実行されないため正しく動作する。
