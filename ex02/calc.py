@@ -59,25 +59,29 @@ class App:
                     self.label["text"] = self.entry.get() + txt     #初期化
                 else:
                     if txt in ["+", "-", "*", "/"]:
-                        self.label["text"] = self.calc() + txt
-                App.num_flag = False
+                        self.label["text"] = self.calc() + txt      #計算
+                App.num_flag = False                                #文字入力をFalseに戻す
             else:
                 if txt in ["+", "-", "*", "/"]:
-                    self.label["text"] = self.label["text"][:-1] + txt
-    
+                    self.label["text"] = self.label["text"][:-1] + txt # 記号を更新する
+
+
+    # 計算を行う関数
     def calc(self):
         return str(eval(self.label["text"] + self.entry.get()))
 
 
+    # 1文字削除する関数
     def delete_one(self):
         self.entry.delete(len(self.entry.get())-1, tk.END)
 
-    # =ボタンがクリックされたときの動作
+    # イコールボタンがクリックされたときの動作
     def equal_click(self):
         ans = self.calc()
         self.entry.delete(0, tk.END)
         self.entry.insert(tk.END, ans)
         self.label["text"] = ""
+        App.num_flag = True
 
 
 def main():
