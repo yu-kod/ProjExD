@@ -7,13 +7,14 @@ class App:
         self.root = root
         root.title("calc")
         root.geometry("300x500")
+        root.resizable(width=False, height=False)
 
         #計算式を表示するlabel
-        self.label = tk.Label(root, anchor=tk.NE, text="", font=("", 10))
+        self.label = tk.Label(root, width=12, text="", font=("", 20))
         self.label.grid(row=0, column=0, columnspan=4)
 
         # テキスト入力欄追加
-        self.entry = tk.Entry(justify="right", width=10, font=("", 40))
+        self.entry = tk.Entry(justify="right", width=11, font=("", 40))
         self.entry.grid(row=1, column=0, columnspan=4)
 
         # 数字ボタン配置
