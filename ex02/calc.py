@@ -1,6 +1,4 @@
 import tkinter as tk
-import tkinter.ttk as ttk
-# import tkinter.messagebox as tkm
 
 class App:
     num_flag = False
@@ -9,20 +7,22 @@ class App:
         root.title("calc")
         root.geometry("300x500")
         root.resizable(width=False, height=False)
+        root.configure(bg="#CCCCCC")
 
 
         #計算式を表示するlabel
-        self.label = tk.Label(root, width=12, text="", font=("", 20))
+        self.label = tk.Label(bg="#CCCCCC", width=12, text="", font=("", 20))
         self.label.grid(row=0, column=0, columnspan=4)
 
 
         # テキスト入力欄追加
-        self.entry = tk.Entry(justify="right", width=11, font=("", 40))
+        self.entry = tk.Entry(
+            justify="right", bg="#CCCCCC", bd=1, relief=tk.GROOVE, width=11, font=("", 40))
         self.entry.grid(row=1, column=0, columnspan=4)
 
         # 数字ボタン配置
         for i in range(10):
-            button = tk.Button(root, text=i, width=5, height=2, relief=tk.GROOVE, font=("", 18))
+            button = tk.Button(root, text=i, bd=1, bg="#CCCCCC", width=5, height=2, relief=tk.GROOVE, font=("", 18))
             button.bind("<1>", self.button_click)
             button.grid(row=(3*7-i) // 3, column=(i-1) % 3)
 
@@ -30,7 +30,7 @@ class App:
         # 数字以外のボタン追加
         other_button = ["<-", "/", "*", "-", "+", "="]
         for i in range(len(other_button)):
-            button = tk.Button(root, text=other_button[i], width=5, height=2, relief=tk.GROOVE, font=("", 18))
+            button = tk.Button(root, text=other_button[i], bd=1, bg="#BBBBBB", width=5, height=2, relief=tk.GROOVE, font=("", 18))
             button.bind("<1>", self.other_click)
             button.grid(row=2+i, column=3)
     
