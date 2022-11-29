@@ -20,23 +20,23 @@ def equal_click(e):
 
 
 # テキスト入力欄追加
-entry = tk.Entry(justify="right", width=10, font=40)
+entry = tk.Entry(justify="right", width=10, font=("",40))
 entry.grid(row=0, column=0, columnspan=3)
 
 # 数字ボタン配置
 for i in range(10):
-    button = tk.Button(root, text=i, width=4, height=2, font=30)
+    button = tk.Button(root, text=i, width=4, height=2, font=("",30))
     button.bind("<1>", button_click)
     button.grid(row=(12-i) // 3, column=(12-i) % 3)
 
 
 # +ボタン追加
-button = tk.Button(root, text="+", width=4, height=2, font=30)
+button = tk.Button(root, text="+", width=4, height=2, font=("",30))
 button.bind("<1>", button_click)
 button.grid(row=4, column=1)
 
 # =ボタン追加
-button = tk.Button(root, text="=", width=4, height=2, font=30)
+button = tk.Button(root, text="=", width=4, height=2, font=("", 30))
 button.bind("<1>", equal_click)
 button.grid(row=4, column=2)
 
