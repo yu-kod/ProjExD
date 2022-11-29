@@ -13,10 +13,13 @@ def button_click(e):
     tkm.showinfo(txt, f"{txt}のボタンが押されました")
 
 
+entry = tk.Entry(justify="right", width=10, font=40)
+entry.grid(row=0, column=0, columnspan=3)
+
 # ボタン配置
 for i in range(10):
     button = tk.Button(root, text=i, width=4, height=2, font=30)
     button.bind("<1>", button_click)
-    button.grid(row=(9-i) // 3, column=(9-i) % 3)
+    button.grid(row=(12-i) // 3, column=(12-i) % 3)
 
 root.mainloop()
