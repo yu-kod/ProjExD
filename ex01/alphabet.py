@@ -16,17 +16,17 @@ def shutsudai():
 
     defect = sample(quiz, ERRCHARNUM)
     print("欠損文字：")
-    print(*kesson)
+    print(*defect)
 
-    hyouji = set(quiz) - set(kesson)
+    hyouji = set(quiz) - set(defect)
     print("表示文字：")
     print(*hyouji)
     print()
-    return kesson
+    return defect
 
 
 # 欠損文字数を受け付け評価する関数(引数：欠損文字のリスト　戻り値：bool)
-def kaitou_num(kesson):
+def kaitou_num(defect):
     user_input1 = input("欠損文字はいくつあるでしょうか？：")
     if int(user_input1) == ERRCHARNUM:
         print("正解です。それでは具体的に欠損文字を1つずつ入力してください")
@@ -36,12 +36,12 @@ def kaitou_num(kesson):
 
 
 # 欠損文字を受け付け評価する関数(引数：欠損文字のリスト　戻り値：bool)
-def katou_char(kesson):
+def katou_char(defect):
     user_answers = []
     for i in range(ERRCHARNUM):
         if not (user_input := input(f"{i+1}つ目の文字を入力してください:")) in user_answers:
             user_answers.append(user_input)
-    if (set(user_answers) == set(kesson)):
+    if (set(user_answers) == set(defect)):
         print("正解です！")
         return True
     else:
@@ -51,8 +51,8 @@ def katou_char(kesson):
 if __name__ == '__main__':
     st = time()
     for i in range(MAXREPEAT):
-        kesson = shutsudai()
-        if kaitou_num(kesson) and katou_char(kesson):
+        defect = shutsudai()
+        if kaitou_num(defect) and katou_char(defect):
             break
         else:
             print("不正解です。またチャレンジしてください")
