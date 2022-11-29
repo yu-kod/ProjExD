@@ -22,17 +22,13 @@ class App:
             button.bind("<1>", self.button_click)
             button.grid(row=(3*7-i) // 3, column=(i-1) % 3)
 
-        other_button = ["C", "/", "*" , "-", "+", "="]
-        # +ボタン追加
+        
+        # 数字以外のボタン追加
+        other_button = ["<-", "/", "*", "-", "+", "="]
         for i in range(len(other_button)):
             button = tk.Button(root, text=other_button[i], width=4, height=2, font=("", 15))
             button.bind("<1>", self.other_click)
             button.grid(row=2+i, column=3)
-
-        # =ボタン追加
-        #button = tk.Button(root, text="=", width=4, height=2, font=("", 15))
-        #button.bind("<1>", self.equal_click)
-        #button.grid(row=5, column=3)
 
         root.mainloop()
     
@@ -50,14 +46,15 @@ class App:
         txt = btn["text"]
         if txt == "=":
             self.equal_click(e)
+        elif txt == "<-":
+            pass
         else:
             if App.num_flag == True:
                 if self.label["text"] == "":
-                    self.label["text"] = self.entry.get()
+                    self.label["text"] = self.entry.get() + txt
                 else:
                     if txt in ["+", "-", "*", "/"]:
-                        self.label["text"] = eval(
-                            self.label["text"] + txt + self.entry.get())
+                        self.label["text"] = str(eval(self.label["text"] + self.entry.get())) + txt
                 App.num_flag = False
             else:
                 pass
@@ -65,10 +62,11 @@ class App:
 
     # =ボタンがクリックされたときの動作
     def equal_click(self, e):
-        formula = self.entry.get()
+        formula = self.label["text"] + self.entry.get()
         ans = eval(formula)
         self.entry.delete(0, tk.END)
         self.entry.insert(tk.END, ans)
+        self.label["text"] = ""
 
 
 
