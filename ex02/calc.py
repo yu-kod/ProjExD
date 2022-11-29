@@ -12,6 +12,13 @@ def button_click(e):
     txt = btn["text"]
     entry.insert(tk.END, txt)
 
+def equal_click(e):
+    formula = entry.get()
+    ans = eval(formula)
+    entry.delete(0, tk.END)
+    entry.insert(tk.END, ans)
+
+
 # テキスト入力欄追加
 entry = tk.Entry(justify="right", width=10, font=40)
 entry.grid(row=0, column=0, columnspan=3)
@@ -30,6 +37,7 @@ button.grid(row=4, column=1)
 
 # =ボタン追加
 button = tk.Button(root, text="=", width=4, height=2, font=30)
+button.bind("<1>", equal_click)
 button.grid(row=4, column=2)
 
 root.mainloop()
