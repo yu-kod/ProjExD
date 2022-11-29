@@ -1,7 +1,7 @@
 import tkinter as tk
 
 class App:
-    num_flag = False
+    num_flag = False         # 記号入力後に数値を入力したか管理する変数(Falseで未入力)
     def __init__(self, root):
         self.root = root
         root.title("calc")
@@ -49,11 +49,11 @@ class App:
     def other_click(self, e):
         btn = e.widget
         txt = btn["text"]
-        if txt == "=":
+        if txt == "=":         # 計算が発生しない処理
             self.equal_click() # 答えを出力
         elif txt == "<-":       # 1文字消す
             self.delete_one()
-        else:
+        else:                   #計算が発声する処理
             if App.num_flag == True:  # 新しく数値を入力したなら
                 if self.label["text"] == "":
                     self.label["text"] = self.entry.get() + txt     #初期化
@@ -75,6 +75,7 @@ class App:
     def delete_one(self):
         self.entry.delete(len(self.entry.get())-1, tk.END)
 
+
     # イコールボタンがクリックされたときの動作
     def equal_click(self):
         ans = self.calc()
@@ -84,10 +85,12 @@ class App:
         App.num_flag = True
 
 
+# メイン関数
 def main():
     root = tk.Tk()
     app = App(root)
     app.root.mainloop()
+
 
 if __name__ == "__main__":
     main()
