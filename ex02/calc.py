@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.messagebox as tkm
 
 class App:
     num_flag = False         # 記号入力後に数値を入力したか管理する変数(Falseで未入力)
@@ -68,7 +69,12 @@ class App:
 
     # 計算を行う関数
     def calc(self):
-        return str(eval(self.label["text"] + self.entry.get()))
+        if self.label["text"][-1] == "/" and self.entry.get() == "0":
+            tkm.showwarning("Error", "ZeroDivisionError: division by zero")
+            print("Error")
+            return self.label["text"][:-1]
+        else:
+            return str(eval(self.label["text"] + self.entry.get()))
 
 
     # 1文字削除する関数
