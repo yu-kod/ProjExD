@@ -6,7 +6,6 @@ class App:
     def __init__(self, root):
         self.root = root
         root.title("calc")
-        root.geometry("300x500")
         root.resizable(width=False, height=False)
         root.configure(bg="#CCCCCC")
 
@@ -63,7 +62,7 @@ class App:
                         self.label["text"] = self.calc() + txt      #計算
                 App.num_flag = False                                #文字入力をFalseに戻す
             else:
-                if txt in ["+", "-", "*", "/"]:
+                if txt in ["+", "-", "*", "/"] and self.label["text"] != "":
                     self.label["text"] = self.label["text"][:-1] + txt # 記号を更新する
 
 
