@@ -1,8 +1,8 @@
 import tkinter as tk
-import tkinter.messagebox as tkm
+# import tkinter.messagebox as tkm
 
 class App:
-
+    num_flag = False
     def __init__(self, root):
         self.root = root
         root.title("calc")
@@ -20,18 +20,19 @@ class App:
         for i in range(10):
             button = tk.Button(root, text=i, width=4, height=2, font=("", 15))
             button.bind("<1>", self.button_click)
-            button.grid(row=(15-i) // 3, column=(15-i) % 3)
+            button.grid(row=(3*7-i) // 3, column=(i-1) % 3)
 
-
+        other_button = ["C", "/", "*" , "-", "+", "="]
         # +ボタン追加
-        button = tk.Button(root, text="+", width=4, height=2, font=("", 15))
-        button.bind("<1>", self.button_click)
-        button.grid(row=4, column=3)
+        for i in range(len(other_button)):
+            button = tk.Button(root, text=other_button[i], width=4, height=2, font=("", 15))
+            button.bind("<1>", self.other_click)
+            button.grid(row=2+i, column=3)
 
         # =ボタン追加
-        button = tk.Button(root, text="=", width=4, height=2, font=("", 15))
-        button.bind("<1>", self.equal_click)
-        button.grid(row=5, column=3)
+        #button = tk.Button(root, text="=", width=4, height=2, font=("", 15))
+        #button.bind("<1>", self.equal_click)
+        #button.grid(row=5, column=3)
 
         root.mainloop()
     
@@ -39,7 +40,28 @@ class App:
     def button_click(self, e):
         btn = e.widget
         txt = btn["text"]
+        if App.num_flag == False:
+            self.entry.delete(0, tk.END)
         self.entry.insert(tk.END, txt)
+        App.num_flag = True
+
+    def other_click(self, e):
+        btn = e.widget
+        txt = btn["text"]
+        if txt == "=":
+            self.equal_click(e)
+        else:
+            if App.num_flag == True:
+                if self.label["text"] == "":
+                    self.label["text"] = self.entry.get()
+                else:
+                    if txt in ["+", "-", "*", "/"]:
+                        self.label["text"] = eval(
+                            self.label["text"] + txt + self.entry.get())
+                App.num_flag = False
+            else:
+                pass
+        
 
     # =ボタンがクリックされたときの動作
     def equal_click(self, e):
