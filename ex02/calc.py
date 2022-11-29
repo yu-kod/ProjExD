@@ -10,9 +10,11 @@ class App:
         root.geometry("300x500")
         root.resizable(width=False, height=False)
 
+
         #計算式を表示するlabel
         self.label = tk.Label(root, width=12, text="", font=("", 20))
         self.label.grid(row=0, column=0, columnspan=4)
+
 
         # テキスト入力欄追加
         self.entry = tk.Entry(justify="right", width=11, font=("", 40))
@@ -32,6 +34,7 @@ class App:
             button.bind("<1>", self.other_click)
             button.grid(row=2+i, column=3)
     
+
     # 数字ボタンがクリックされたときの動作(メッセージボックス表示)
     def button_click(self, e):
         btn = e.widget
@@ -41,33 +44,37 @@ class App:
         self.entry.insert(tk.END, txt)
         App.num_flag = True
 
+
     # 数字以外のボタンを押したときの動作
     def other_click(self, e):
         btn = e.widget
         txt = btn["text"]
         if txt == "=":
-            self.equal_click(e)
-        elif txt == "<-":
+            self.equal_click() # 答えを出力
+        elif txt == "<-":       # 1文字消す
             self.delete_one()
         else:
-            if App.num_flag == True:
+            if App.num_flag == True:  # 新しく数値を入力したなら
                 if self.label["text"] == "":
-                    self.label["text"] = self.entry.get() + txt
+                    self.label["text"] = self.entry.get() + txt     #初期化
                 else:
                     if txt in ["+", "-", "*", "/"]:
-                        self.label["text"] = str(eval(self.label["text"] + self.entry.get())) + txt
+                        self.label["text"] = self.calc() + txt
                 App.num_flag = False
             else:
                 if txt in ["+", "-", "*", "/"]:
                     self.label["text"] = self.label["text"][:-1] + txt
     
+    def calc(self):
+        return str(eval(self.label["text"] + self.entry.get()))
+
+
     def delete_one(self):
         self.entry.delete(len(self.entry.get())-1, tk.END)
 
     # =ボタンがクリックされたときの動作
-    def equal_click(self, e):
-        formula = self.label["text"] + self.entry.get()
-        ans = eval(formula)
+    def equal_click(self):
+        ans = self.calc()
         self.entry.delete(0, tk.END)
         self.entry.insert(tk.END, ans)
         self.label["text"] = ""
