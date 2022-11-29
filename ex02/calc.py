@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 # import tkinter.messagebox as tkm
 
 class App:
@@ -19,7 +20,7 @@ class App:
 
         # 数字ボタン配置
         for i in range(10):
-            button = tk.Button(root, text=i, width=5, height=2, font=("", 18))
+            button = tk.Button(root, text=i, width=5, height=2, relief=tk.GROOVE, font=("", 18))
             button.bind("<1>", self.button_click)
             button.grid(row=(3*7-i) // 3, column=(i-1) % 3)
 
@@ -27,7 +28,7 @@ class App:
         # 数字以外のボタン追加
         other_button = ["<-", "/", "*", "-", "+", "="]
         for i in range(len(other_button)):
-            button = tk.Button(root, text=other_button[i], width=5, height=2, font=("", 18))
+            button = tk.Button(root, text=other_button[i], width=5, height=2, relief=tk.GROOVE, font=("", 18))
             button.bind("<1>", self.other_click)
             button.grid(row=2+i, column=3)
     
