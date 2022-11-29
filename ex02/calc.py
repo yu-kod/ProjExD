@@ -10,7 +10,7 @@ root.geometry("300x500")
 def button_click(e):
     btn = e.widget
     txt = btn["text"]
-    #entry.insert(tk.END, txt)
+    entry.insert(tk.END, txt)
 
 # テキスト入力欄追加
 entry = tk.Entry(justify="right", width=10, font=40)
