@@ -13,7 +13,7 @@ class Application(tk.Frame):
         master.resizable(width=False, height=False)
 
         self.image = tk.PhotoImage(file="fig/2.png")
-        self.canvas = tk.Canvas(master, width=1500, height=900, bg="black")        # cavas配置
+        self.canvas = tk.Canvas(master, width=1500, height=900, bg="black")        # canvas配置
         self.canvas.pack()
 
         self.mx,self.my = 1, 1
@@ -26,7 +26,7 @@ class Application(tk.Frame):
         master.bind("<KeyPress>", self.key_down)                                    # key反応配置
         master.bind("<KeyRelease>", self.key_up)
 
-        self.maze = mm.make_maze(15, 9)
+        self.maze = mm.make_maze(15, 9)                                             #map生成。似たような処理内容になっているので後ほど関数化する
         self.maze_after1 = cPickle.loads(cPickle.dumps(self.maze, -1))
         for i in range(1, 14):
             for j in range(1, 8):
@@ -44,8 +44,8 @@ class Application(tk.Frame):
         self.maze_after2[13][7] = 3
 
 
-        self.timer = 0
-        self.HP = 250
+        self.timer = 0                  # 各変数の定義。timer: キー長押しでの時間管理、HP:体力管理、tick:map切り替え管理
+        self.HP = 200
         self.tick = 0
         self.main_proc()
         self.rythm()
@@ -76,12 +76,12 @@ class Application(tk.Frame):
             self.HP -= 1
             if self.HP <= 0:
                 self.mx, self.my = 1, 1
-                self.HP = 300
+                self.HP = 200
 
         self.cx = self.mx*100 + 50
         self.cy = self.my*100 + 50
         self.canvas.coords(self.bird, self.cx, self.cy)             #計算後反映
-        self.canvas.coords(self.HP_bar, 0,5,1500*self.HP/300,20)
+        self.canvas.coords(self.HP_bar, 0,5,1500*self.HP/200,20)
         self.canvas.tag_raise(self.bird)
         self.canvas.tag_raise(self.HP_bar)
         self.master.after(4, self.main_proc)
@@ -93,13 +93,13 @@ class Application(tk.Frame):
             self.mx += num
         elif direction == "my":
             self.my += num
-        if self.maze[self.mx][self.my] == 1:
+        if self.maze[self.mx][self.my] == 1:                        #移動先に壁があったら元の場所に戻る
             self.mx, self.my = buff_x, buff_y
 
 
     def rythm(self):
-        self.canvas.delete("map")
-        if self.tick == 0:
+        self.canvas.delete("map")                   #ラグくなるので一旦全map削除(重要！！！)
+        if self.tick == 0:                          #奇数tick偶数tickでmapを切り替え。
             mm.show_maze(self.canvas, self.maze_after1)
             self.tick = 1
         else:
