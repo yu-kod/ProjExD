@@ -1,4 +1,5 @@
 import tkinter as tk
+import maze_maker as mm
 
 
 class Application(tk.Frame):
@@ -22,6 +23,9 @@ class Application(tk.Frame):
         master.bind("<KeyRelease>", self.key_up)
 
         self.main_proc()
+
+        maze = mm.make_maze(15,9)
+        mm.show_maze(self.canvas, maze)
     
     def key_down(self,e):
         self.key = e.keysym
