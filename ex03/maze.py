@@ -16,7 +16,7 @@ class Application(tk.Frame):
 
         self.cx = 300
         self.cy = 400
-        self.canvas.create_image(self.cx,self.cy,image=self.image, tag="bird")
+        self.bird = self.canvas.create_image(self.cx,self.cy,image=self.image)
 
         self.key = ""
         master.bind("<KeyPress>", self.key_down)
@@ -42,7 +42,8 @@ class Application(tk.Frame):
             self.cy += 20
         elif self.key == "Up":
             self.cy -= 20
-        self.canvas.coords("bird", self.cx, self.cy)
+        self.canvas.coords(self.bird, self.cx, self.cy)
+        self.canvas.tag_raise(self.bird)
         self.master.after(50, self.main_proc)
 
 
