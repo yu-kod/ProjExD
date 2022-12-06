@@ -14,9 +14,8 @@ class Application(tk.Frame):
         self.canvas = tk.Canvas(master, width=1500, height=900, bg="black")
         self.canvas.pack()
 
-        self.cx = 300
-        self.cy = 400
-        self.bird = self.canvas.create_image(self.cx,self.cy,image=self.image)
+        self.mx,self.my = 1, 1
+        self.bird = self.canvas.create_image(150,150,image=self.image)
 
         self.key = ""
         master.bind("<KeyPress>", self.key_down)
@@ -35,16 +34,18 @@ class Application(tk.Frame):
 
     def main_proc(self):
         if self.key == "Right":
-            self.cx += 20
+            self.mx += 1
         elif self.key == "Left":
-            self.cx -= 20
+            self.mx -= 1
         elif self.key == "Down":
-            self.cy += 20
+            self.my += 1
         elif self.key == "Up":
-            self.cy -= 20
+            self.my -= 1
+        self.cx = self.mx*100 + 50
+        self.cy = self.my*100 + 50
         self.canvas.coords(self.bird, self.cx, self.cy)
         self.canvas.tag_raise(self.bird)
-        self.master.after(50, self.main_proc)
+        self.master.after(70, self.main_proc)
 
 
 
