@@ -18,13 +18,17 @@ class Application(tk.Frame):
         self.canvas.create_image(self.cx,self.cy,image=self.image)
 
         self.key = ""
+        master.bind("<KeyPress>", self.key_down)
+        master.bind("<KeyRelease>", self.key_up)
     
     
     def key_down(self,e):
-        pass
+        self.key = e.keysym
+        print(self.key)
 
     def key_up(self,e):
-        pass
+        self.key = ""
+        print(self.key)
 
 
 
