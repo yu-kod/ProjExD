@@ -1,5 +1,6 @@
 import tkinter as tk
 import maze_maker as mm
+import copy
 
 
 class Application(tk.Frame):
@@ -21,13 +22,12 @@ class Application(tk.Frame):
         master.bind("<KeyPress>", self.key_down)                                    # key反応配置
         master.bind("<KeyRelease>", self.key_up)
 
+        self.timer = 0
         self.main_proc()
 
-        self.maze = mm.make_maze(15,9)
-        self.maze[1][1] = 2
-        self.maze[13][7] = 3
-        mm.show_maze(self.canvas, self.maze)
+        self.maze = mm.make_maze(15, 9)
 
+        self.tick = 0
         self.rythm()
     
     def key_down(self,e):               #ボタンを押したとき、keyをself.keyに保存
@@ -39,16 +39,23 @@ class Application(tk.Frame):
 
 
     def main_proc(self):
-        if self.key == "Right": self.move_detect_wall("mx", 1)             #矢印で移動を行う
-        if self.key == "Left": self.move_detect_wall("mx", -1)
-        if self.key == "Down": self.move_detect_wall("my", 1)
-        if self.key == "Up": self.move_detect_wall("my", -1)
+        if self.timer == 0:
+            if self.key == "Right": self.move_detect_wall("mx", 1)             #矢印で移動を行う
+            if self.key == "Left": self.move_detect_wall("mx", -1)
+            if self.key == "Down": self.move_detect_wall("my", 1)
+            if self.key == "Up": self.move_detect_wall("my", -1)
+        if self.key == "":
+            self.timer = 0
+        else:
+            self.timer += 1
+            if self.timer >= 500:
+                self.timer = 0
 
         self.cx = self.mx*100 + 50
         self.cy = self.my*100 + 50
         self.canvas.coords(self.bird, self.cx, self.cy)             #計算後反映
         self.canvas.tag_raise(self.bird)
-        self.master.after(100, self.main_proc)
+        self.master.after(1, self.main_proc)
 
 
     def move_detect_wall(self, direction, num):                     #壁を判定しつつ移動処理を行う。
@@ -62,10 +69,16 @@ class Application(tk.Frame):
 
 
     def rythm(self):
-        print("tap")
+        maze_after = copy.deepcopy(self.maze)
+        for i in range(1,14):
+            for j in range(1,8):
+                if (i + j) % 2 == self.tick % 2:
+                    maze_after[i][j] = 4
+        maze_after[1][1] = 2
+        maze_after[13][7] = 3
+        mm.show_maze(self.canvas, maze_after)
+        self.tick += 1
         self.master.after(500, self.rythm)
-
-
 
 
 def main():
@@ -73,6 +86,7 @@ def main():
     app = Application(master = win)
     
     app.mainloop()
+
 
 if __name__ == "__main__":
     main()
