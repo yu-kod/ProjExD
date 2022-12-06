@@ -45,7 +45,7 @@ class Application(tk.Frame):
 
 
         self.timer = 0
-        self.HP = 300
+        self.HP = 250
         self.tick = 0
         self.main_proc()
         self.rythm()
@@ -71,7 +71,8 @@ class Application(tk.Frame):
             if self.timer >= 25:
                 self.timer = 0
         
-        if (self.tick == 1 and self.maze_after1[self.mx][self.my] == 4) or (self.tick == 0 and self.maze_after2[self.mx][self.my] == 4):
+        if (self.tick == 1 and self.maze_after1[self.mx][self.my] == 4) or \
+           (self.tick == 0 and self.maze_after2[self.mx][self.my] == 4):
             self.HP -= 1
             if self.HP <= 0:
                 self.mx, self.my = 1, 1
