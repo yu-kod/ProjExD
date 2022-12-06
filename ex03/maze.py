@@ -24,13 +24,19 @@ class Application(tk.Frame):
         self.main_proc()
 
         self.maze = mm.make_maze(15,9)
+        self.maze[1][1] = 2
+        self.maze[13][7] = 3
         mm.show_maze(self.canvas, self.maze)
+
+        self.rythm()
     
     def key_down(self,e):               #ボタンを押したとき、keyをself.keyに保存
         self.key = e.keysym
 
+
     def key_up(self,e):
         self.key = ""
+
 
     def main_proc(self):
         if self.key == "Right": self.move_detect_wall("mx", 1)             #矢印で移動を行う
@@ -43,7 +49,7 @@ class Application(tk.Frame):
         self.canvas.coords(self.bird, self.cx, self.cy)             #計算後反映
         self.canvas.tag_raise(self.bird)
         self.master.after(100, self.main_proc)
-    
+
 
     def move_detect_wall(self, direction, num):                     #壁を判定しつつ移動処理を行う。
         buff_x, buff_y = self.mx,self.my
@@ -53,6 +59,11 @@ class Application(tk.Frame):
             self.my += num
         if self.maze[self.mx][self.my] == 1:
             self.mx, self.my = buff_x, buff_y
+
+
+    def rythm(self):
+        print("tap")
+        self.master.after(500, self.rythm)
 
 
 
