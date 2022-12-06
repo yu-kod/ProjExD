@@ -22,7 +22,7 @@ def show_maze(canvas, maze_lst):
     color = ["white", "gray", "blue", "#00ff00", "#cc5555"]
     for x in range(len(maze_lst)):
         for y in range(len(maze_lst[x])):
-            canvas.create_rectangle(x*100, y*100, x*100+100, y*100+100, fill=color[maze_lst[x][y]])
+            canvas.create_rectangle(x*100, y*100, x*100+100, y*100+100, fill=color[maze_lst[x][y]], tag="map")
 
 #2次元リストを渡すとCUIで迷路を表示
 def print_maze(maze_lst):

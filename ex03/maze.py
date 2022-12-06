@@ -1,5 +1,6 @@
 import tkinter as tk
 import maze_maker as mm
+import copy
 import pickle as cPickle
 
 
@@ -96,6 +97,7 @@ class Application(tk.Frame):
 
 
     def rythm(self):
+        self.canvas.delete("map")
         if self.tick == 0:
             mm.show_maze(self.canvas, self.maze_after1)
             self.tick = 1
