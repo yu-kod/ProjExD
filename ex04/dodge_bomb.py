@@ -184,10 +184,10 @@ def main():
 
         if collision(player, enemy1):
             player.hit()
-            break
+            running = False
         if collision(player, enemy2):
             player.hit()
-            break
+            running = False
 
         # ×ボタンでの終了
         for event in pg.event.get():
