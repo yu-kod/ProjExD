@@ -52,6 +52,7 @@ class Player:
         self.rct.center = xy
         self.pre_key = [1, 0]  # 以前の方向を記憶する変数
         self.number = no  # 0 or 1
+        self.bullet_num = 5
         if self.number:
             self.bullet_direction = [-1, 0]
         else:
@@ -77,7 +78,7 @@ class Player:
 
     # 弾を設置する処理を行う関数
     def set_bullet(self):
-        if len(self.bullets) < 10:  # 画面内に10発以上無ければ弾を撃てる
+        if len(self.bullets) < self.bullet_num:  # 画面内に10発以上無ければ弾を撃てる
             self.bullets.append(
                 Projectile(BLUE, 20, self.bullet_direction, self))  # 弾追加
 
@@ -106,6 +107,23 @@ class Projectile:
         return yoko == -1 or tate == -1  # 画面外に出たらTrueを返却
 
 
+# 弾を強化するアイテムのクラス
+class Item:
+    def __init__(self, color, rad, player: Player):
+        self.sfc = pg.Surface((2*rad, 2*rad))
+        self.sfc.set_colorkey((0, 0, 0))
+        pg.draw.circle(self.sfc, color, (rad, rad), rad)
+        self.rct = self.sfc.get_rect()
+        if player.number:
+            self.rct.center = (1100, 450)
+        else:
+            self.rct.center = (400, 450)
+
+    # アイテムの描画関数　画面のオブジェクトを入力
+    def blit(self, scr: Screen):
+        scr.sfc.blit(self.sfc, self.rct)
+
+
 # オブジェクトが重なっているか確認する関数
 def check_bound(obj_rct, scr_rct):
     """
@@ -131,7 +149,15 @@ def main():
     # Playerを宣言
     p1 = Player(RED, 10.0, (400, 450), 0)
     p2 = Player(GREEN, 10.0, (1100, 450), 1)
+    # アイテムを宣言
+    p1_item = Item(YELLOW, 10, p1)
+    p2_item = Item(YELLOW, 10, p2)
+    # 初回の時間を決定
     counter = 8000
+    pre_count = counter
+    # アイテムを表示するかどうかのフラッaグ
+    p1_item_flag = 1
+    p2_item_flag = 1
 
     # main loop
     while True:
@@ -152,19 +178,33 @@ def main():
         scr.blit()
 
         if counter < 0:
-            counter += 8000
-        elif counter < 4000:
+            p1_item_flag = 1
+            p2_item_flag = 1
+            counter += pre_count + 100  # 次回の時間決定
+            pre_count = counter
+        elif counter < 2000:
             # 弾の移動処理　画面外で消滅
             for bullet in p1.bullets:
                 if bullet.update(scr):
                     p1.bullets.pop(p1.bullets.index(bullet))
-                if bullet.rct.colliderect(p2.rct):
+                if bullet.rct.colliderect(p2.rct):  # 弾に当たったら終了
                     return
             for bullet in p2.bullets:
                 if bullet.update(scr):
                     p2.bullets.pop(p2.bullets.index(bullet))
-                if bullet.rct.colliderect(p1.rct):
+                if bullet.rct.colliderect(p1.rct):  # 弾に当たったら終了
                     return
+
+            if p1_item_flag == 1:
+                p1_item.blit(scr)
+                if p1_item.rct.colliderect(p1.rct):
+                    p1.bullet_num += 3
+                    p1_item_flag = 0
+            if p2_item_flag == 1:
+                p2_item.blit(scr)
+                if p2_item.rct.colliderect(p2.rct):
+                    p2.bullet_num += 3
+                    p2_item_flag = 0
         else:
             for bullet in p1.bullets:
                 bullet.blit(scr)
