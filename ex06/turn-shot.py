@@ -107,7 +107,7 @@ class Projectile:
         return yoko == -1 or tate == -1  # 画面外に出たらTrueを返却
 
 
-# 弾を強化するアイテムのクラス
+# 弾を強化するアイテムのクラス(近藤悠斗)
 class Item:
     def __init__(self, color, rad, player: Player):
         self.sfc = pg.Surface((2*rad, 2*rad))
@@ -122,6 +122,7 @@ class Item:
     # アイテムの描画関数　画面のオブジェクトを入力
     def blit(self, scr: Screen):
         scr.sfc.blit(self.sfc, self.rct)
+# (近藤ここまで)
 
 
 # オブジェクトが重なっているか確認する関数
@@ -180,6 +181,7 @@ def main():
         if counter < 0:
             p1_item_flag = 1
             p2_item_flag = 1
+            # (counter, pre_count変数については近藤悠斗)
             counter += pre_count + 100  # 次回の時間決定
             pre_count = counter
         elif counter < 2000:
@@ -195,6 +197,7 @@ def main():
                 if bullet.rct.colliderect(p1.rct):  # 弾に当たったら終了
                     return
 
+            # アイテム処理(近藤悠斗)
             if p1_item_flag == 1:
                 p1_item.blit(scr)
                 if p1_item.rct.colliderect(p1.rct):
@@ -205,6 +208,7 @@ def main():
                 if p2_item.rct.colliderect(p2.rct):
                     p2.bullet_num += 3
                     p2_item_flag = 0
+            # (近藤ここまで)
         else:
             for bullet in p1.bullets:
                 bullet.blit(scr)
