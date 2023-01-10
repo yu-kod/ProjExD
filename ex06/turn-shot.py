@@ -125,6 +125,26 @@ class Item:
 # (近藤ここまで)
 
 
+# 追加機能　ライフ表示用のクラス(鈴木友也)
+class Life:
+    def __init__(self, hp, color, xy):
+        self.hp = hp
+        self.color = color
+        self.xy = xy
+        self.font = pg.font.Font(None, 55)
+        self.text = self.font.render(f"HP:{self.hp}", True, self.color)
+
+    # 描画
+    def blit(self, scr):
+        scr.sfc.blit(self.text, self.xy)
+
+    # HPの更新
+    def update(self, scr):
+        self.hp -= 1
+        self.text = self.font.render(f"HP:{self.hp}", True, self.color)
+        self.blit(scr)
+
+
 # オブジェクトが重なっているか確認する関数
 def check_bound(obj_rct, scr_rct):
     """
@@ -150,6 +170,9 @@ def main():
     # Playerを宣言
     p1 = Player(RED, 10.0, (400, 450), 0)
     p2 = Player(GREEN, 10.0, (1100, 450), 1)
+    # ライフの宣言（鈴木友也）
+    p1hp = Life(3, RED, (0, 0))
+    p2hp = Life(3, GREEN, (1415, 0))
     # アイテムを宣言
     p1_item = Item(YELLOW, 10, p1)
     p2_item = Item(YELLOW, 10, p2)
@@ -185,17 +208,19 @@ def main():
             counter += pre_count + 100  # 次回の時間決定
             pre_count = counter
         elif counter < 2000:
-            # 弾の移動処理　画面外で消滅
+            # 弾の移動処理　画面外で消滅　（プレイヤーと衝突で消滅　衝突でHP-1（鈴木友也））
             for bullet in p1.bullets:
                 if bullet.update(scr):
                     p1.bullets.pop(p1.bullets.index(bullet))
-                if bullet.rct.colliderect(p2.rct):  # 弾に当たったら終了
-                    return
+                if bullet.rct.colliderect(p2.rct):
+                    p1.bullets.pop(p1.bullets.index(bullet))
+                    p2hp.update(scr)
             for bullet in p2.bullets:
                 if bullet.update(scr):
                     p2.bullets.pop(p2.bullets.index(bullet))
-                if bullet.rct.colliderect(p1.rct):  # 弾に当たったら終了
-                    return
+                if bullet.rct.colliderect(p1.rct):
+                    p2.bullets.pop(p2.bullets.index(bullet))
+                    p1hp.update(scr)
 
             # アイテム処理(近藤悠斗)
             if p1_item_flag == 1:
@@ -216,6 +241,13 @@ def main():
                 bullet.blit(scr)
         p1.update(scr)
         p2.update(scr)
+        # ライフ更新（鈴木友也）
+        p1hp.blit(scr)
+        p2hp.blit(scr)
+
+        # HPが0になったら終了（鈴木友也）
+        if p1hp.hp == 0 or p2hp == 0:
+            return
 
         # 画面更新
         pg.display.update()
