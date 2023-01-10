@@ -14,16 +14,18 @@ BLUE = (0, 0, 255)
 # 画面描画用のクラス
 class Screen:
     # 初期化関数　タイトル、縦横幅、画像のパスを入力
-    def __init__(self, title, wh, img_path):
+    def __init__(self, title, wh):
         pg.display.set_caption(title)
         self.sfc = pg.display.set_mode(wh)
         self.rct = self.sfc.get_rect()
-        self.bgi_sfc = pg.image.load(img_path)
-        self.bgi_rct = self.bgi_sfc.get_rect()
 
     # 画面の描画関数
     def blit(self):
-        self.sfc.blit(self.bgi_sfc, self.bgi_rct)
+        self.sfc.fill(BLACK)
+        pg.draw.line(
+                        self.sfc, WHITE, (self.rct.centerx, 0),
+                        (self.rct.centerx, 900), 10
+                    )
 
 
 # Playerの関数
@@ -74,17 +76,10 @@ class Player:
         self.blit(scr)  # 描画
 
     # 弾を設置する処理を行う関数
-    def set_bullet(self, scr: Screen):
-        if len(self.bullets) < 10:  # 画面内に5発以上無ければ弾を撃てる
+    def set_bullet(self):
+        if len(self.bullets) < 10:  # 画面内に10発以上無ければ弾を撃てる
             self.bullets.append(
                 Projectile(BLUE, 20, self.bullet_direction, self))  # 弾追加
-
-    # 弾を動かす処理を行う関数
-    def shot_bullet(self, scr: Screen):
-        # 弾の移動処理　画面外で消滅
-        for bullet in self.bullets:
-            if bullet.update(scr):
-                self.bullets.pop(self.bullets.index(bullet))
 
 
 # 弾用のクラス
@@ -131,11 +126,11 @@ def main():
     clock = pg.time.Clock()
 
     # 画面宣言
-    scr = Screen("turn-shot", (1500, 900), "fig/pg_bg.jpg")
+    scr = Screen("turn-shot", (1500, 900))
 
     # Playerを宣言
-    p1 = Player(RED, 10.0, (900, 400), 0)
-    p2 = Player(GREEN, 10.0, (1000, 400), 1)
+    p1 = Player(RED, 10.0, (400, 450), 0)
+    p2 = Player(GREEN, 10.0, (1100, 450), 1)
     counter = 8000
 
     # main loop
@@ -148,10 +143,10 @@ def main():
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_e and counter >= 4000:
                     # 弾を撃つ処理
-                    p1.set_bullet(scr)
+                    p1.set_bullet()
                 if event.key == pg.K_m and counter >= 4000:
                     # 弾を撃つ処理
-                    p2.set_bullet(scr)
+                    p2.set_bullet()
 
         # 画面描画
         scr.blit()
@@ -159,8 +154,17 @@ def main():
         if counter < 0:
             counter += 8000
         elif counter < 4000:
-            p1.shot_bullet(scr)
-            p2.shot_bullet(scr)
+            # 弾の移動処理　画面外で消滅
+            for bullet in p1.bullets:
+                if bullet.update(scr):
+                    p1.bullets.pop(p1.bullets.index(bullet))
+                if bullet.rct.colliderect(p2.rct):
+                    return
+            for bullet in p2.bullets:
+                if bullet.update(scr):
+                    p2.bullets.pop(p2.bullets.index(bullet))
+                if bullet.rct.colliderect(p1.rct):
+                    return
         else:
             for bullet in p1.bullets:
                 bullet.blit(scr)
