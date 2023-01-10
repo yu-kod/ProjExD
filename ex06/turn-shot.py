@@ -26,12 +26,12 @@ class Screen:
                         self.sfc, WHITE, (self.rct.centerx, 0),
                         (self.rct.centerx, 900), 10
                     )
-
     # 堀内
-        phase = clock//1000
+        phase = clock // 1000
         font = pg.font.Font(None, 55)
-        text1 = font.render(F"{phase%4}", True, (0,0,0))   # 描画する文字列の設定
-        self.sfc.blit(text1, [750, 55])# 文字列の表示位置
+        text1 = font.render(F"{phase % 4}", True, (YELLOW))   # 描画する文字列の設定
+        self.sfc.blit(text1, [800, 55])# 文字列の表示位置
+        self.sfc.blit(text1, [50, 55])# 文字列の表示位置
 
 
 # Playerの関数
@@ -182,7 +182,7 @@ def main():
                     p2.set_bullet()
 
         # 画面描画
-        scr.blit(clock)
+        scr.blit(counter)
 
         if counter < 0:
             p1_item_flag = 1
