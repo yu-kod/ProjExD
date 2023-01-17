@@ -64,7 +64,7 @@ class Player:
         self.rct.center = xy
         self.pre_key = [1, 0]  # 以前の方向を記憶する変数
         self.number = no  # 0 or 1
-        self.bullet_num = 5
+        self.bullet_num = 10
         self.bullet_type = type  # 弾の種類を記憶(野田健太)
         if self.number:
             self.bullet_direction = [-2, 0]
@@ -91,7 +91,7 @@ class Player:
 
     # 弾を設置する処理を行う関数
     def set_bullet(self):
-        change_time = 250
+        change_time = 100
         if self.bullet_type == "normal": 
             color = BLUE
         elif self.bullet_type == "spread":
@@ -218,7 +218,7 @@ def main():
     p1_item = Item(YELLOW, 10, p1)
     p2_item = Item(YELLOW, 10, p2)
     # 初回の時間を決定
-    counter = 8000
+    counter = 10000
     pre_count = counter
     # アイテムを表示するかどうかのフラッグ
     p1_item_flag = 1
