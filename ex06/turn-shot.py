@@ -81,7 +81,7 @@ class Player:
     # 弾を設置する処理を行う関数
     def set_bullet(self):
         change_time = 500
-        if self.bullet_type == "normal":
+        if self.bullet_type == "normal": 
             color = BLUE
         elif self.bullet_type == "spread":
             color = LIGHTBLUE
