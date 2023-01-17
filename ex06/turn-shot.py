@@ -21,12 +21,23 @@ class Screen:
         self.rct = self.sfc.get_rect()
 
     # 画面の描画関数
-    def blit(self):
+    def blit(self, clock):
         self.sfc.fill(BLACK)
         pg.draw.line(
                         self.sfc, WHITE, (self.rct.centerx, 0),
                         (self.rct.centerx, 900), 10
                     )
+    # 堀内
+        phase = clock // 1000
+        font = pg.font.Font(None, 55) 
+        if phase-2 >=0:
+            text1 = font.render(F"{phase-2}", True, (YELLOW))   # 描画する文字列の設定
+            self.sfc.blit(text1, [1425, 55])# 文字列の表示位置
+            self.sfc.blit(text1, [50, 55])# 文字列の表示位置
+        else:
+            text1 = font.render(F"{2-abs(phase-1)}", True, (YELLOW))   # 描画する文字列の設定
+            self.sfc.blit(text1, [1450, 55])# 文字列の表示位置
+            self.sfc.blit(text1, [50, 55])# 文字列の表示位置
 
 
 # Playerの関数
@@ -144,6 +155,26 @@ class Item:
 # (近藤ここまで)
 
 
+# 追加機能　ライフ表示用のクラス(鈴木友也)
+class Life:
+    def __init__(self, hp, color, xy):
+        self.hp = hp
+        self.color = color
+        self.xy = xy
+        self.font = pg.font.Font(None, 55)
+        self.text = self.font.render(f"HP:{self.hp}", True, self.color)
+
+    # 描画
+    def blit(self, scr):
+        scr.sfc.blit(self.text, self.xy)
+
+    # HPの更新
+    def update(self, scr):
+        self.hp -= 1
+        self.text = self.font.render(f"HP:{self.hp}", True, self.color)
+        self.blit(scr)
+
+
 # オブジェクトが重なっているか確認する関数
 def check_bound(obj_rct, scr_rct):
     """
@@ -159,6 +190,17 @@ def check_bound(obj_rct, scr_rct):
     return yoko, tate
 
 
+# ゲームオーバー時に呼び出される関数(中村隼人)
+def gameover(clock, player, scr:Screen):
+    font = pg.font.Font(None, 300) #ゲームオーバーの文字の大きさを設定
+    txt = f"{player} WIN!" #表示する文字列
+    txt_rend = font.render(txt, True, (128,   0, 128)) #文字を紫色でrenderする。
+    txt_rect = txt_rend.get_rect(center=(scr.rct.right//2, scr.rct.bottom//2)) #真ん中に文字を配置する
+    scr.sfc.blit(txt_rend, txt_rect) #文字を貼り付け
+    pg.display.update() #ディスプレイ全体を更新。これをしないと文字が表示されない。
+    clock.tick(0.33) #3秒間表示する
+# (中村ここまで)
+
 # メイン関数
 def main():
     clock = pg.time.Clock()
@@ -169,6 +211,9 @@ def main():
     # Playerを宣言
     p1 = Player(RED, 10.0, (400, 450), 0, "normal")
     p2 = Player(GREEN, 10.0, (1100, 450), 1, "normal")
+    # ライフの宣言（鈴木友也）
+    p1hp = Life(3, RED, (0, 0))
+    p2hp = Life(3, GREEN, (1415, 0))
     # アイテムを宣言
     p1_item = Item(YELLOW, 10, p1)
     p2_item = Item(YELLOW, 10, p2)
@@ -198,7 +243,7 @@ def main():
                     p2.set_bullet()
 
         # 画面描画
-        scr.blit()
+        scr.blit(counter)
 
         if counter < 0:
             p1_item_flag = 1
@@ -213,17 +258,20 @@ def main():
         elif counter < 2000:
             p1.bullet_type = "normal"
             p2.bullet_type = "normal"
-            # 弾の移動処理　画面外で消滅
+            # 弾の移動処理　画面外で消滅　（プレイヤーと衝突で消滅　衝突でHP-1（鈴木友也））
             for bullet in p1.bullets:
                 if bullet.update(scr, p1):
                     p1.bullets.pop(p1.bullets.index(bullet))
-                if bullet.rct.colliderect(p2.rct):  # 弾に当たったら終了
-                    return
+                if bullet.rct.colliderect(p2.rct):
+                    p1.bullets.pop(p1.bullets.index(bullet))
+                    p2hp.update(scr)
             for bullet in p2.bullets:
                 if bullet.update(scr, p2):
                     p2.bullets.pop(p2.bullets.index(bullet))
-                if bullet.rct.colliderect(p1.rct):  # 弾に当たったら終了
-                    return
+                if bullet.rct.colliderect(p1.rct):
+                    p2.bullets.pop(p2.bullets.index(bullet))
+                    p1hp.update(scr)
+
 
             # アイテム処理(近藤悠斗)
             if p1_item_flag == 1:
@@ -244,6 +292,17 @@ def main():
                 bullet.blit(scr)
         p1.update(scr)
         p2.update(scr)
+        # ライフ更新（鈴木友也）
+        p1hp.blit(scr)
+        p2hp.blit(scr)
+
+        # HPが0になったら終了（鈴木友也）
+        if p1hp.hp <= 0:
+            gameover(clock, "Player2", scr) #gameover関数を呼び出す(中村隼人)
+            return
+        if p2hp.hp <= 0:
+            gameover(clock, "Player1", scr) #gameover関数を呼び出す(中村隼人)
+            return
 
         # 画面更新
         pg.display.update()
