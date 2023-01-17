@@ -67,9 +67,9 @@ class Player:
         self.bullet_num = 5
         self.bullet_type = type  # 弾の種類を記憶(野田健太)
         if self.number:
-            self.bullet_direction = [-1, 0]
+            self.bullet_direction = [-2, 0]
         else:
-            self.bullet_direction = [1, 0]
+            self.bullet_direction = [2, 0]
         # 弾のリスト
         self.bullets = []
 
@@ -91,7 +91,7 @@ class Player:
 
     # 弾を設置する処理を行う関数
     def set_bullet(self):
-        change_time = 500
+        change_time = 250
         if self.bullet_type == "normal": 
             color = BLUE
         elif self.bullet_type == "spread":
