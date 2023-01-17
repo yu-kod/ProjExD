@@ -31,11 +31,11 @@ class Screen:
         font = pg.font.Font(None, 55) 
         if phase-2 >=0:
             text1 = font.render(F"{phase-2}", True, (YELLOW))   # 描画する文字列の設定
-            self.sfc.blit(text1, [800, 55])# 文字列の表示位置
+            self.sfc.blit(text1, [1425, 55])# 文字列の表示位置
             self.sfc.blit(text1, [50, 55])# 文字列の表示位置
         else:
             text1 = font.render(F"{2-abs(phase-1)}", True, (YELLOW))   # 描画する文字列の設定
-            self.sfc.blit(text1, [800, 55])# 文字列の表示位置
+            self.sfc.blit(text1, [1450, 55])# 文字列の表示位置
             self.sfc.blit(text1, [50, 55])# 文字列の表示位置
 
 
