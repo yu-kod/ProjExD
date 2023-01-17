@@ -160,6 +160,17 @@ def check_bound(obj_rct, scr_rct):
     return yoko, tate
 
 
+# ゲームオーバー時に呼び出される関数(中村隼人)
+def gameover(clock, player, scr:Screen):
+    font = pg.font.Font(None, 300) #ゲームオーバーの文字の大きさを設定
+    txt = f"{player} WIN!" #表示する文字列
+    txt_rend = font.render(txt, True, (128,   0, 128)) #文字を紫色でrenderする。
+    txt_rect = txt_rend.get_rect(center=(scr.rct.right//2, scr.rct.bottom//2)) #真ん中に文字を配置する
+    scr.sfc.blit(txt_rend, txt_rect) #文字を貼り付け
+    pg.display.update() #ディスプレイ全体を更新。これをしないと文字が表示されない。
+    clock.tick(0.33) #3秒間表示する
+# (中村ここまで)
+
 # メイン関数
 def main():
     clock = pg.time.Clock()
@@ -222,6 +233,7 @@ def main():
                     p2.bullets.pop(p2.bullets.index(bullet))
                     p1hp.update(scr)
 
+
             # アイテム処理(近藤悠斗)
             if p1_item_flag == 1:
                 p1_item.blit(scr)
@@ -246,7 +258,11 @@ def main():
         p2hp.blit(scr)
 
         # HPが0になったら終了（鈴木友也）
-        if p1hp.hp == 0 or p2hp == 0:
+        if p1hp.hp == 0:
+            gameover(clock, "Player2", scr) #gameover関数を呼び出す(中村隼人)
+            return
+        if p2hp == 0:
+            gameover(clock, "Player1", scr) #gameover関数を呼び出す(中村隼人)
             return
 
         # 画面更新
